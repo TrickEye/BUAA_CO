@@ -19,7 +19,8 @@ module CTRL (
     output [10:0] Tuse1,
     output [6:0]  Ause1,
     output [10:0] Tuse2,
-    output [6:0]  Ause2
+    output [6:0]  Ause2,
+	output E_start
 );
     wire LB, LBU, LH, LHU, LW, SB, SH, SW, ADD, ADDU, SUB, SUBU, MULT, MULTU, DIV, DIVU, SLL, SRL, SRA, SLLV, SRLV, SRAV, AND, OR, XOR, NOR, ADDI, ADDIU, ANDI, ORI, XORI, LUI, SLT, SLTI, SLTIU, SLTU, BEQ, BNE, BLEZ, BGTZ, BLTZ, BGEZ, J, JAL, JALR, JR, MFHI, MFLO, MTHI, MTLO;
     assign LB       = (instr[31:26] == `LB    );
@@ -151,7 +152,7 @@ module CTRL (
                   (JAL) ? 31 :
                   (JALR | ADD | ADDU | AND | NOR | OR | SLL | SLLV | SLT | SLTI | SLTU | SLTIU | SRA | SRAV | SRL | SRLV | SUB | SUBU | XOR | MFHI | MFLO) ? instr[15:11] :
                   (LUI | ADDI | ADDIU | ANDI | ORI | XORI | LB | LBU | LH | LHU | LW) ? instr[20:16] :
-                  (MTHI | DIV | DIVU | MULT | MULTU | MTLO) ? 6'b100000 :
+                  //(MTHI | DIV | DIVU | MULT | MULTU | MTLO) ? 6'b100000 :
                   0;
     
     assign Tuse1 = (BEQ | BGEZ | BGTZ | BLEZ | BLTZ | BNE | J | JR | MFHI | MFLO | JAL | JALR) ? 0 :
@@ -159,7 +160,8 @@ module CTRL (
                    0;
     assign Ause1 = (J | JAL) ? 0 :
                    (SLL | SLLV | SRA | SRAV | SRL | SRLV) ? instr[20:16] :
-                   (BEQ | BGEZ | BGTZ | BLEZ | BLTZ | BNE | JR | JALR | SB | SH | SW | ADD | ADDU | AND | NOR | OR | SLT | SLTI | SLTU | SLTIU | SUB | SUBU | XOR | LUI | ADDI | ADDIU | ANDI | ORI | XORI | LB | LBU | LH | LHU | LW | DIV | DIVU | MULT | MULTU) ? instr[25:21] :
+                   (BEQ | BGEZ | BGTZ | BLEZ | BLTZ | BNE | JR | JALR | SB | SH | SW | ADD | ADDU | AND | NOR | OR | SLT | SLTI | SLTU | SLTIU | SUB | SUBU | XOR | LUI | ADDI | ADDIU | ANDI | ORI | XORI | LB | LBU | LH | LHU | LW) ? instr[25:21] :
+                   (DIV | DIVU | MULT | MULTU) ? {{1'b1}, {instr[25:21]}} :
                    (MFHI | MFLO) ? 6'b100000 :
                    (MTHI | MTLO) ? {{1'b1}, {instr[25:21]}} :
                    0;
@@ -170,6 +172,9 @@ module CTRL (
     assign Ause2 = (BGTZ | BLEZ | BLTZ | BNE | ADD | ADDU | AND | NOR | OR | SLT | SLTU | SUB | SUBU | XOR | DIV | DIVU | MULT | MULTU | SB | SH | SW) ? instr[20:16] :
                    (SLLV | SRAV | SRLV) ? instr[20 : 16] :
                    0;
+
+    assign E_start = (MULT | MULTU | DIV | DIVU);
+    
                    
 endmodule
 
