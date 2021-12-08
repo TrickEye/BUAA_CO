@@ -170,7 +170,7 @@ module CTRL (
                    (SB | SH | SW) ? 2 :
                    0;
     assign Ause2 = (BGTZ | BLEZ | BLTZ | BNE | ADD | ADDU | AND | NOR | OR | SLT | SLTU | SUB | SUBU | XOR | DIV | DIVU | MULT | MULTU | SB | SH | SW) ? instr[20:16] :
-                   (SLLV | SRAV | SRLV) ? instr[20 : 16] :
+                   (SLLV | SRAV | SRLV) ? instr[25 : 21] :
                    0;
 
     assign E_start = (MULT | MULTU | DIV | DIVU);

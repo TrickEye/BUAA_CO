@@ -63,7 +63,7 @@ module D_NPC(
                     out_pc = ((in_cmpresult & `AEqual0) == 0) ? brIm : pc4;
                 end
                 `NPC_bltz  : begin
-                    out_pc = ((in_cmpresult & `ALargerThan0) == 0 && (in_cmpresult & `AEqual0) == 0) ? brIm : pc4;
+                    out_pc = ((in_cmpresult & `ALargerThan0) == 0 || (in_cmpresult & `AEqual0) == 0) ? brIm : pc4;
                 end
                 `NPC_bgez  : begin
                     out_pc = ((in_cmpresult & `AEqual0) || (in_cmpresult & `ALargerThan0)) ? brIm : pc4;
