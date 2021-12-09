@@ -75,6 +75,7 @@ module CTRL (
     assign MTLO     = (instr[31:26] == `Special && instr[5:0] == `MTLO_S );
 
     assign npcop = (BEQ) ? `NPC_beq : 
+                   (BNE) ? `NPC_bne :
                    (BGEZ) ? `NPC_bgez : 
                    (BGTZ) ? `NPC_bgtz :
                    (BLEZ) ? `NPC_blez :
@@ -150,8 +151,8 @@ module CTRL (
                   6;
     assign Anew = (BEQ | BGEZ | BGTZ | BLEZ | BLTZ | BNE | J | JR | SB | SH | SW) ? 0 :
                   (JAL) ? 31 :
-                  (JALR | ADD | ADDU | AND | NOR | OR | SLL | SLLV | SLT | SLTI | SLTU | SLTIU | SRA | SRAV | SRL | SRLV | SUB | SUBU | XOR | MFHI | MFLO) ? instr[15:11] :
-                  (LUI | ADDI | ADDIU | ANDI | ORI | XORI | LB | LBU | LH | LHU | LW) ? instr[20:16] :
+                  (JALR | ADD | ADDU | AND | NOR | OR | SLL | SLLV | SLT | SLTU | SRA | SRAV | SRL | SRLV | SUB | SUBU | XOR | MFHI | MFLO) ? instr[15:11] :
+                  (LUI | ADDI | ADDIU | ANDI | ORI | XORI | LB | LBU | LH | LHU | LW | SLTI | SLTIU) ? instr[20:16] :
                   //(MTHI | DIV | DIVU | MULT | MULTU | MTLO) ? 6'b100000 :
                   0;
     

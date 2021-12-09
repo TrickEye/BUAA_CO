@@ -70,7 +70,13 @@ module mips_txt;
         if (m_data_byteen[1]) fixed_wdata[15: 8] = m_data_wdata[15: 8];
         if (m_data_byteen[0]) fixed_wdata[7 : 0] = m_data_wdata[7 : 0];
     end
-
+    always @(posedge clk) begin
+        if (~reset) begin
+            if (w_grf_we && (w_grf_addr != 0)) begin
+                $display("%d@%h: $%d <= %h", $time, w_inst_addr, w_grf_addr, w_grf_wdata);
+            end
+        end
+    end
     always @(posedge clk) begin
         if (reset) for (i = 0; i < 4096; i = i + 1) data[i] <= 0;
         else if (|m_data_byteen) begin
@@ -79,13 +85,7 @@ module mips_txt;
         end
     end
 
-    always @(posedge clk) begin
-        if (~reset) begin
-            if (w_grf_we && (w_grf_addr != 0)) begin
-                $display("%d@%h: $%d <= %h", $time, w_inst_addr, w_grf_addr, w_grf_wdata);
-            end
-        end
-    end
+    
 
     always #2 clk <= ~clk;
 
