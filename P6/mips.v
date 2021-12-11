@@ -53,7 +53,8 @@ module mips(
 
     wire [31:0] E_fw_v, M_fw_v, W_fw_v;
     wire [4:0]  E_fw_a, M_fw_a, W_fw_a; 
-	wire E_Will_Use_hilo;
+	//wire E_Will_Use_hilo;
+    wire E_start;
 	wire STALL;
 
     //  F  /////////////////////////////////////////////////////////////////////////////////////////
@@ -105,8 +106,8 @@ module mips(
                    (E_Anew && (D_Ause2[4:0] == E_Anew[4:0]) && (D_Tuse2 < E_Tnew)) |
                    (M_Anew && (D_Ause2[4:0] == M_Anew[4:0]) && (D_Tuse2 < M_Tnew)) |
                    (W_Anew && (D_Ause2[4:0] == W_Anew[4:0]) && (D_Tuse2 < W_Tnew)) |
-                   (D_Ause1[5] == 1 && (E_hiloBusy | E_Will_Use_hilo))|
-                   (D_Ause2[5] == 1 && (E_hiloBusy | E_Will_Use_hilo));
+                   (D_Ause1[5] == 1 && (E_hiloBusy | E_start))|
+                   (D_Ause2[5] == 1 && (E_hiloBusy | E_start));
 
     assign stall1 = (E_Anew && (D_Ause1[4:0] == E_Anew[4:0]) && (D_Tuse1 < E_Tnew));
     assign stall2 = (M_Anew && (D_Ause1[4:0] == M_Anew[4:0]) && (D_Tuse1 < M_Tnew));
@@ -199,8 +200,8 @@ module mips(
         .out_rdata2     (E_rdata2_beforeFW),
         .out_extout     (E_extout),
         .fw_v           (E_fw_v),
-        .fw_a           (E_fw_a),
-        .Will_Use_hilo  (E_Will_Use_hilo)
+        .fw_a           (E_fw_a)
+        //.Will_Use_hilo  (E_Will_Use_hilo)
     );
 
     assign E_rdata1 = (E_instr[25:21] && (E_instr[25:21] == M_fw_a)) ? M_fw_v :
@@ -223,7 +224,8 @@ module mips(
         .hiloop         (E_hiloop),
         //.dmop           (),
         .Tnew           (E_Tnew),
-        .Anew           (E_Anew)
+        .Anew           (E_Anew),
+        .E_start        (E_start)
         //.Tuse1          (),
         //.Ause1          (),
         //.Tuse2          (),

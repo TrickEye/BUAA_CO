@@ -89,8 +89,8 @@ module M_REG(
     
 
     assign fw_a = (JAL) ? 31 : 
-                  (JALR | ADD | ADDU | AND | NOR | OR | SLL | SLLV | SLT | SLTI | SLTU | SLTIU | SRA | SRAV | SRL | SRLV | SUB | SUBU | XOR | MFHI | MFLO) ? out_instr[15:11] :
-                  (LUI | ADDI | ADDIU | ANDI | ORI | XORI) ? out_instr[20:16] :
+                  (JALR | ADD | ADDU | AND | NOR | OR | SLL | SLLV | SLT | SLTU | SRA | SRAV | SRL | SRLV | SUB | SUBU | XOR | MFHI | MFLO) ? out_instr[15:11] :
+                  (LUI | ADDI | ADDIU | ANDI | ORI | XORI | SLTI | SLTIU) ? out_instr[20:16] :
                   0;
     assign fw_v = (JAL | JALR) ? out_pc + 8 :
                   (LUI | ADD | ADDU | SUB | SUBU | SLL | SRL | SRA | SLLV | SRLV | SRAV | AND | OR|XOR|NOR|ADDI|ADDIU|ANDI|ORI|XORI|SLT|SLTI|SLTIU|SLTU) ? out_aluout :
